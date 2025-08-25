@@ -1,11 +1,25 @@
-use std::net::TcpListener;
+use axum::{
+    routing::{get, post}, Json, Router
+};
 
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+// import of module
+mod vehicle;
+use vehicle::{vehicle_get, vehicle_post};
 
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
+const ADDRESS: &str = "0.0.0.0:3000";
 
-        println!("Connection established! {}", stream.peer_addr().unwrap());
-    }
+#[tokio::main]
+async fn main() {
+    let mut requests_counter: u16 = 0;
+    // Routers
+    //let app = Router::new().route("/", get(|| async { "This is the home page" }));
+    
+    let vehicle = Router::new()
+        .route("/vehicle", get(vehicle_get))
+        .route("/vehicle", post(vehicle_post))
+    ;
+
+    // Port listener
+    let listener = tokio::net::TcpListener::bind(ADDRESS).await.unwrap();
+    axum::serve(listener, vehicle).await.unwrap();
 }
