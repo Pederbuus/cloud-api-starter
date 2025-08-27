@@ -5,7 +5,11 @@ edition = "2024"
 
 [dependencies]
 axum = { version = "0.8.4", features = ["macros"] }
+deadpool-postgres = "0.14.1"
+diesel = "2.2.12"
+dotenv = "0.15.0"
 hyper = "1.7.0"
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1.47.1", features = ["full"] }
+tokio-postgres = "0.7.13"
 uuid = { version = "1.18.0", features = ["v4"] }
