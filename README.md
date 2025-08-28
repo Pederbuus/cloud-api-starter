@@ -1,5 +1,8 @@
 # Multi-Language API Project
 
+## Run using Docker
+1. Requires Docker Desktop or 
+
 ## 🎯 Goal
 Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial plan)
 

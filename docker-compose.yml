@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Service for your Rust API
+  rust-api:
+    # Build context points to the subdirectory
+    build:
+      context: ./rust-api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./rust-api:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: cargo watch -x run
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/rust_api_db
+    depends_on:
+      - db
+
+  # Service for your PostgreSQL database
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=rust_api_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+
+# Future services could go here, for example:
+#  python-api:
+#    build:
+#      context: ./python-api
+#      dockerfile: Dockerfile.dev
+#    ports:
+#      - "4000:4000"
+#    depends_on:
+#      - db
+
+volumes:
+  postgres_data:

@@ -1,6 +1,11 @@
-use tokio_postgres::{NoTls, Error};
+use tokio_postgres::{
+    //Client,
+    NoTls, Error
+};
 use std::sync::Arc;
 use axum::extract::State; // Import State
+// Import environment variable functionality
+use std::env;
 
 mod vehicle;
 use vehicle::{vehicle_get, AppState, //vehicle_post
@@ -43,10 +48,13 @@ async fn root_handler(
 }
 
 
-async fn establish_db_connection() -> Result<tokio_postgres::Client, Error> {
-    // moving to a .env file: const DB: &str = "postgres://postgres:admin@localhost:5432/postgres";
+async fn establish_db_connection() -> Result<Client, Error> {
+    // Read the DATABASE_URL from the environment
+    let database_url = env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+
     let (client, connection) = tokio_postgres::connect(
-        "host=localhost port=5432 user=postgres password=admin dbname=postgres",
+        &database_url,
         NoTls,
     ).await?;
 

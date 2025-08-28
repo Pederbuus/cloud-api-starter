@@ -1,0 +1,17 @@
+# Use the official Rust image as a base for building
+FROM rust:1.89.0
+
+# Install cargo-watch to enable live reloading
+RUN cargo install cargo-watch
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy the manifest files first to leverage Docker's layer caching
+COPY Cargo.toml Cargo.lock ./
+
+# A trick to install all dependencies and cache them
+RUN mkdir -p src && echo "fn main() {}" > src/main.rs && cargo build --release
+
+# The rest of your code will be mounted from your machine,
+# so the `cargo watch` command will handle the next steps.
