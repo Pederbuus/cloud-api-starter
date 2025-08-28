@@ -11,7 +11,7 @@ use uuid::Uuid;
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 // Must use pub (public) for other files to access it
 pub struct Vehicle {
-    id: Option<String>, // UUID, optional
+    id: Option<Uuid>, // UUID, optional
     make: String,
     model: String,
     year: u16,
