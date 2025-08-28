@@ -1,5 +1,5 @@
 use tokio_postgres::{
-    //Client,
+    Client,
     NoTls, Error
 };
 use std::sync::Arc;

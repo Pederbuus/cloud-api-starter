@@ -31,17 +31,17 @@ pub async fn vehicle_get(State(state): State<Arc<AppState>>) -> Json<Vec<Vehicle
         .expect("query failed");
 
     // Map database rows to Vehicle structs
-    let vehicles: Vec<Vehicle> = rows.iter().map(|row| {
+    let vehicle: Vec<Vehicle> = rows.iter().map(|row| {
         Vehicle {
-            id: Some(row.get::<usize, String>(0)),
+            id: Some(Uuid::new_v4()),
             make: row.get(1),
             model: row.get(2),
             year: row.get::<usize, i32>(3) as u16,
         }
     }).collect();
 
-    // Return the vehicles as JSON to the API caller
-    Json(vehicles)
+    // Return the vehicle as JSON to the API caller
+    Json(vehicle)
 }
 
 // #[axum::debug_handler]
@@ -74,8 +74,8 @@ pub async fn vehicle_post(
     println!("Customer Email: {}", c.email);
 
     // In a real application, you would save the vehicle to a database here
-    let id = uuid::Uuid::new_v4().to_string();
-    payload.id = Some(id.clone());
+    // let id = uuid::Uuid::new_v4();
+    payload.id = Some(Uuid::new_v4());
     println!("POST /vehicle, id: {:?}", payload.id); //check the livelyness of the endpoint
 
     Json::from(payload)
