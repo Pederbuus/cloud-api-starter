@@ -1,7 +1,9 @@
 # Multi-Language API Project
 
 ## Run using Docker
-1. Requires Docker Desktop or 
+1. Requires Docker Desktop
+2. In the root-directory run `docker-compose up`
+   * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`)
 
 ## 🎯 Goal
 Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial plan)
@@ -48,5 +50,6 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 **28-08-2025**
 
 <!-- Easy🟢, Medium🟡, Hard🔴 -->
-- research `docker` and Google - `Cloud Run functions`
+- Research `docker` and Google - `Cloud Run functions`
+- Research `cargo-watch` and its use with `docker`
 <!-- ~~ abc ~~ -->
