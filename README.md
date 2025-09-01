@@ -1,9 +1,9 @@
 # Multi-Language API Project
 
 ## Run using Docker
-1. Requires Docker Desktop
+1. Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. In the root-directory run `docker-compose up`
-   * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`)
+   * Spins up containers for `PostgreSQL` and the API-directorie(s) (see `docker-compose.yml`)
 
 ## 🎯 Goal
 Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial plan)
@@ -25,7 +25,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 
 
 
-## 📌 Requirements (not final)
+## 📌 Requirements (evolves)
 
 ### API Endpoints
 - `GET /notes` → list all notes
@@ -44,12 +44,15 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 ## ⏳ Timeline
 - **21-08-2025** → Setup Rust (prior **Rust** knowledge: ~1%)
 - **27/28-08-2025** → Done with basic `axum` (API / listener) and `tokio_postgres` (database) setup
+- **29-08 / 01-09-2025** → Repository can now be run using `Docker`
 
 
 ## TODO
 **28-08-2025**
 
 <!-- Easy🟢, Medium🟡, Hard🔴 -->
-- Research `docker` and Google - `Cloud Run functions`
-- Research `cargo-watch` and its use with `docker`
+- ~~Research `docker`~~, Google - `Cloud Run functions`, ...
+- Fix "hot-reload" for `Docker`, as it should work, but doesn't...
+- Write automated tests
+- Generate a webpage with the API-description
 <!-- ~~ abc ~~ -->

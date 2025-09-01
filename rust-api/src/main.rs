@@ -8,11 +8,11 @@ use axum::extract::State; // Import State
 use std::env;
 
 mod vehicle;
-use vehicle::{vehicle_get, AppState, //vehicle_post
+use vehicle::{vehicle_get, AppState, vehicle_post
 };
 
 use axum::{
-    routing::get,
+    routing::{get, post},
     Router,
 };
 
@@ -30,6 +30,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root_handler))
         .route("/vehicle", get(vehicle_get))
+        .route("/vehicle", post(vehicle_post))
         .with_state(shared_state); // Pass the shared state (the db) to Axum
 
     // Run the server
