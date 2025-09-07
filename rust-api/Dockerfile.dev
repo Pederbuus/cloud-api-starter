@@ -1,17 +1,38 @@
-# Use the official Rust image as a base for building
-FROM rust:1.89.0
+# Dockerfile.dev
 
-# Install cargo-watch to enable live reloading
+# --- Chef Stage: Prepare the recipe file ---
+FROM rust:1.89.0 AS chef
+WORKDIR /usr/src/app
+RUN cargo install cargo-chef
+
+# --- Planner Stage: Create the recipe ---
+FROM chef AS planner
+WORKDIR /usr/src/app
+COPY Cargo.toml Cargo.lock ./
+RUN cargo chef prepare --recipe-path recipe.json
+
+# --- Builder Stage: Build dependencies and app ---
+FROM rust:1.89.0 AS builder
+WORKDIR /usr/src/app
+# Copy the recipe from the planner stage
+COPY --from=planner /usr/src/app/recipe.json recipe.json
+# Cook the dependencies (this is the key caching step)
+RUN cargo chef cook --release --recipe-path recipe.json
+# Now copy your source code
+COPY . .
+RUN cargo build --release
+
+# --- Final Dev Stage: The live-reloading environment ---
+FROM rust:1.89.0
+# The working directory for the final stage
+WORKDIR /usr/src/app
+# Copy the compiled binary from the builder stage
+COPY --from=builder /usr/src/app/target/release/your-app-name /usr/local/bin/your-app-name
+# Copy the entire source directory for cargo watch to work on
+COPY . .
+
+# Install cargo-watch
 RUN cargo install cargo-watch
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
-
-# Copy the manifest files first to leverage Docker's layer caching
-COPY Cargo.toml Cargo.lock ./
-
-# A trick to install all dependencies and cache them
-RUN mkdir -p src && echo "fn main() {}" > src/main.rs && cargo build --release
-
-# The rest of your code will be mounted from your machine,
-# so the `cargo watch` command will handle the next steps.
+# Your dev command
+CMD ["sh", "-c", "cargo watch --poll -x run"]

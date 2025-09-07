@@ -11,9 +11,10 @@ services:
       - ./rust-api:/usr/src/app
     ports:
       - "3000:3000"
-    command: cargo watch -x run
+    command: sh -c "cargo watch --poll -x run" # potentially not needed
     environment:
       - DATABASE_URL=postgres://user:password@db:5432/rust_api_db
+      - CARGO_TARGET_DIR=/app/target
     depends_on:
       - db
 

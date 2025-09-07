@@ -34,7 +34,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 - `DELETE /notes/{id}` → delete a note
 
 ### Utility Endpoints
-- `GET /time` → returns the current time  
+- `GET /ping` → returns the current time  
 - `GET /notes/total` → returns the total number of notes in the DB  
 
 ### Security
@@ -45,6 +45,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 - **21-08-2025** → Setup Rust (prior **Rust** knowledge: ~1%)
 - **27/28-08-2025** → Done with basic `axum` (API / listener) and `tokio_postgres` (database) setup
 - **29-08 / 01-09-2025** → Repository can now be run using `Docker`
+- **07-09-2025** → Hot-reload now works AND with `Chef` the reload-part went from 26sec to 1sec
 
 
 ## TODO
@@ -52,7 +53,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 
 <!-- Easy🟢, Medium🟡, Hard🔴 -->
 - ~~Research `docker`~~, Google - `Cloud Run functions`, ...
-- Fix "hot-reload" for `Docker`, as it should work, but doesn't...
+- ~~Fix "hot-reload" for `Docker`, as it should work, but doesn't...~~
 - Write automated tests
 - Generate a webpage with the API-description
 <!-- ~~ abc ~~ -->

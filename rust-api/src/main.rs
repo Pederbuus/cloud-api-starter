@@ -45,7 +45,7 @@ async fn root_handler(
     // Example: Use the client to execute a query
     let rows = state.db_client.query("SELECT * FROM vehicle", &[]).await.unwrap();
     let result = rows.len();
-    format!("Rows in the database: {}", result)
+    format!("Rows in the database: {}", result+4)
 }
 
 
