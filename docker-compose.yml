@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Service for your Rust API
   rust-api:
