@@ -1,20 +1,7 @@
-use tokio_postgres::{
-    Client,
-    NoTls, Error
-};
-use std::sync::Arc;
-use axum::extract::State; // Import State
-// Import environment variable functionality
-use std::env;
-
+pub mod utils;
+use crate::utils::*;
 mod vehicle;
-use vehicle::{vehicle_get, AppState, vehicle_post
-};
-
-use axum::{
-    routing::{get, post},
-    Router,
-};
+use vehicle::{vehicle_get, vehicle_post, vehicle_post_query};
 
 #[tokio::main]
 async fn main() {
@@ -28,9 +15,11 @@ async fn main() {
 
     // Build the Axum router
     let app = Router::new()
-        .route("/", get(root_handler))
+        .route("/", get(ping)) //ping endpoint
         .route("/vehicle", get(vehicle_get))
         .route("/vehicle", post(vehicle_post))
+        .route("/vehicle/query", post(vehicle_post_query))
+        .route("/vehicle/total", get(vehicle_total))
         .with_state(shared_state); // Pass the shared state (the db) to Axum
 
     // Run the server
@@ -39,7 +28,11 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn root_handler(
+async fn ping() -> &'static str {
+    "pong"
+}
+
+async fn vehicle_total(
     State(state): State<Arc<AppState>>,
 ) -> String {
     // Example: Use the client to execute a query

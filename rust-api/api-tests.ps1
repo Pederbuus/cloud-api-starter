@@ -24,7 +24,14 @@ Invoke-RestMethod @Params
 # Create a new vehicle using: Query
 # Deserializing with the wrong content/fields fails the whole request
 $Params = @{
-    Uri = 'http://localhost:3000/vehicle?make=Tesla&model=Model S&year=2020&name=John&email=john@example.com'
+    Uri = 'http://localhost:3000/vehicle/query?make=Tesla&model=Model S&year=2020&name=John&email=john@example.com'
     Method = 'Post'
+}
+Invoke-RestMethod @Params
+
+# Get vehicles using: Query
+$Params = @{
+    Uri = 'http://localhost:3000/vehicle?'
+    Method = 'Get'
 }
 Invoke-RestMethod @Params

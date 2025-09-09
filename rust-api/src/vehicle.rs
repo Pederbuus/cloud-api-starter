@@ -1,26 +1,4 @@
-use std::sync::{Arc};
-use axum::{
-    extract::{Query, State}, Json
-};
-
-use tokio_postgres::Client;
-
-use uuid::Uuid;
-
-// Able to convert to and from Json
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
-// Must use pub (public) for other files to access it
-pub struct Vehicle {
-    id: Option<Uuid>, // UUID, optional
-    make: String,
-    model: String,
-    year: u16,
-}
-
-// Define the application state struct
-pub struct AppState {
-    pub db_client: Client,
-}
+use crate::utils::*;
 
 // Extract the client from state instead of taking &mut Client directly
 pub async fn vehicle_get(State(state): State<Arc<AppState>>) -> Json<Vec<Vehicle>> {
@@ -36,7 +14,7 @@ pub async fn vehicle_get(State(state): State<Arc<AppState>>) -> Json<Vec<Vehicle
             id: Some(Uuid::new_v4()),
             make: row.get(1),
             model: row.get(2),
-            year: row.get::<usize, i32>(3) as u16,
+            year: row.get::<usize, i32>(3),
         }
     }).collect();
 
@@ -44,18 +22,35 @@ pub async fn vehicle_get(State(state): State<Arc<AppState>>) -> Json<Vec<Vehicle
     Json(vehicle)
 }
 
-// #[axum::debug_handler]
-// pub async fn vehicle_post(Json(mut payload): Json<Vehicle>) -> Json<Vehicle> {
+#[axum::debug_handler]
+pub async fn vehicle_post(
+    State(state): State<Arc<AppState>>,
+    Json(mut payload): Json<Vehicle>
+) -> Json<Vehicle> {
 
-//     println!("Manufacturer: {}", payload.make);
+    println!("Manufacturer: {}", payload.make);
 
-//     // In a real application, you would save the vehicle to a database here
-//     let id = uuid::Uuid::new_v4().to_string();
-//     payload.id = Some(id.clone());
-//     println!("POST /vehicle, id: {:?}", payload.id); //check the livelyness of the endpoint
+    // In a real application, you would save the vehicle to a database here
+    let id = uuid::Uuid::new_v4();
+    payload.id = Some(id);
+    // Save the payload to the database
+    let query = "INSERT INTO vehicle (id, make, model, year) VALUES ($1, $2, $3, $4)";
+    state.db_client
+        .execute(
+            query,
+            &[
+                &payload.id,
+                &payload.make,
+                &payload.model,
+                &(payload.year as i32),
+            ],
+        )
+        .await
+        .expect("Failed to insert vehicle");
+    println!("POST /vehicle, id: {:?}", payload.id); //check the livelyness of the endpoint
 
-//     Json::from(payload)
-// }
+    Json::from(payload)
+}
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Customer {
@@ -64,7 +59,8 @@ pub struct Customer {
 }
 
 #[axum::debug_handler]
-pub async fn vehicle_post(
+pub async fn vehicle_post_query(
+    State(state): State<Arc<AppState>>,
     Query(mut payload): Query<Vehicle>,
     Query(c): Query<Customer>,
 ) -> Json<Vehicle> {
@@ -74,8 +70,21 @@ pub async fn vehicle_post(
     println!("Customer Email: {}", c.email);
 
     // In a real application, you would save the vehicle to a database here
-    // let id = uuid::Uuid::new_v4();
-    payload.id = Some(Uuid::new_v4());
+    let id = uuid::Uuid::new_v4();
+    payload.id = Some(id);
+    let query = "INSERT INTO vehicle (id, make, model, year) VALUES ($1, $2, $3, $4)";
+    state.db_client
+        .execute(
+            query,
+            &[
+                &payload.id,
+                &payload.make,
+                &payload.model,
+                &(payload.year as i32),
+            ],
+        )
+        .await
+        .expect("Failed to insert vehicle");
     println!("POST /vehicle, id: {:?}", payload.id); //check the livelyness of the endpoint
 
     Json::from(payload)

@@ -6,8 +6,8 @@ CREATE TABLE vehicle (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     make VARCHAR(255) NOT NULL,
     model VARCHAR(255) NOT NULL,
-    year INT4 NOT NULL
-);
+    year INTEGER NOT NULL CHECK (year >= 0)
+    );
 
 -- Insert some initial data
 INSERT INTO vehicle (make, model, year) VALUES
