@@ -2,10 +2,10 @@
 Invoke-RestMethod -Uri "http://localhost:3000/"
 
 # Vehicle
-Invoke-RestMethod -Uri "http://localhost:3000/vehicle" -Method Get
+# Invoke-RestMethod -Uri "http://localhost:3000/vehicle" -Method Get
 
 # Create a new vehicle
-Invoke-RestMethod -Uri "http://localhost:3000/vehicle" -Method Post
+# Invoke-RestMethod -Uri "http://localhost:3000/vehicle" -Method Post
 
 # Create a new vehicle using: Json
 # Using the wrong fields fails the whole request

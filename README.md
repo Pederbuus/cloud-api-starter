@@ -30,11 +30,12 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 ### API Endpoints
 - `GET /notes` → list all notes
 - `POST /notes` → create a note
+- `POST /notes/query` → create a note
 - `GET /notes/{id}` → retrieve a single note
 - `DELETE /notes/{id}` → delete a note
 
 ### Utility Endpoints
-- `GET /ping` → returns the current time  
+- `GET /ping` → return pong
 - `GET /notes/total` → returns the total number of notes in the DB  
 
 ### Security
@@ -46,6 +47,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 - **27/28-08-2025** → Done with basic `axum` (API / listener) and `tokio_postgres` (database) setup
 - **29-08 / 01-09-2025** → Repository can now be run using `Docker`
 - **07-09-2025** → Hot-reload now works AND with `Chef` the reload-part went from 26sec to 1sec
+- **09-09-2025** → Have imports in a single file (for now), added a query POST-endpoint
 
 
 ## TODO
