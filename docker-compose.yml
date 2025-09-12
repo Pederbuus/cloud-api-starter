@@ -1,4 +1,22 @@
 services:
+  # Service for your PostgreSQL database
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=rust_api_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d rust_api_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   # Service for your Rust API
   rust-api:
     # Build context points to the subdirectory
@@ -14,30 +32,31 @@ services:
       - DATABASE_URL=postgres://user:password@db:5432/rust_api_db
       - CARGO_TARGET_DIR=/app/target
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
-  # Service for your PostgreSQL database
-  db:
-    image: postgres:17
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=rust_api_db
+  # Service for your .NET API
+  dotnet-api:
+    build:
+      context: ./dotnet-api
+      dockerfile: Dockerfile.dev
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./db-init:/docker-entrypoint-initdb.d
-
-# Future services could go here, for example:
-#  python-api:
-#    build:
-#      context: ./python-api
-#      dockerfile: Dockerfile.dev
-#    ports:
-#      - "4000:4000"
-#    depends_on:
-#      - db
+      - ./dotnet-api:/app
+      - /app/bin
+      - /app/obj
+      - dotnet-certs:/root/.aspnet/https
+    ports:
+      - "5297:5297"
+      # - "7007:7007"
+    environment:
+       - ASPNETCORE_URLS=http://+:5297 #;https://+:7007
+      # - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/aspnetapp.pfx
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: /usr/local/bin/entrypoint.sh
 
 volumes:
   postgres_data:
+  dotnet-certs:

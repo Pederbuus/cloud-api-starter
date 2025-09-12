@@ -1,0 +1,11 @@
+# Ignore the bin and obj folders, as these are build artifacts
+# that should be managed by the container's build process.
+bin/
+obj/
+
+# Ignore any IDE-specific files and folders
+.vs/
+.vscode/
+
+# Ignore development logs
+*.log

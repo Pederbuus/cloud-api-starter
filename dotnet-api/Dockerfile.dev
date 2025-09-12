@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0
+
+WORKDIR /app
+
+# Copy the entrypoint script and make it executable.
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# This new line converts the Windows-style line endings to Linux-style.
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh 
+
+# Copy the project file to a new layer to leverage Docker's layer caching.
+COPY ./dotnet-api.csproj ./
+
+# Restore project dependencies.
+RUN dotnet restore
+
+# Copy the rest of the application code.
+COPY . .
+
+# Expose ports 5297 and 7007, which are used for HTTP and HTTPS communication.
+EXPOSE 5297
+# EXPOSE 7007
