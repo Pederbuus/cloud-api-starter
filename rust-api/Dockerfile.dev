@@ -1,38 +1,49 @@
-# Dockerfile.dev
-
-# --- Chef Stage: Prepare the recipe file ---
-FROM rust:1.89.0 AS chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.89.0-alpine AS planner
 WORKDIR /usr/src/app
-RUN cargo install cargo-chef
 
-# --- Planner Stage: Create the recipe ---
-FROM chef AS planner
-WORKDIR /usr/src/app
-COPY Cargo.toml Cargo.lock ./
+# Step 1: Copy all files into the 'planner' stage.
+# This ensures cargo-chef has access to all source files
+# to correctly generate the recipe.
+COPY . .
+
+# Step 2: Use cargo-chef to prepare the dependency recipe.
+# The base image already has the correct tools, so this will work.
 RUN cargo chef prepare --recipe-path recipe.json
 
 # --- Builder Stage: Build dependencies and app ---
+# We use a standard rust image for building.
 FROM rust:1.89.0 AS builder
 WORKDIR /usr/src/app
-# Copy the recipe from the planner stage
+
+# ADDED STEP: Install cargo-chef in this stage as well.
+RUN cargo install cargo-chef
+
+# Step 3: Copy the recipe from the 'planner' stage.
 COPY --from=planner /usr/src/app/recipe.json recipe.json
-# Cook the dependencies (this is the key caching step)
+
+# Step 4: Cook the dependencies. This is the key caching step.
+# It will only rebuild dependencies if Cargo.toml changes.
 RUN cargo chef cook --release --recipe-path recipe.json
-# Now copy your source code
+
+# Step 5: Copy the remaining application code.
 COPY . .
+
+# Step 6: Build the final release binary.
 RUN cargo build --release
 
 # --- Final Dev Stage: The live-reloading environment ---
 FROM rust:1.89.0
-# The working directory for the final stage
 WORKDIR /usr/src/app
-# Copy the compiled binary from the builder stage
-COPY --from=builder /usr/src/app/target/release/your-app-name /usr/local/bin/your-app-name
-# Copy the entire source directory for cargo watch to work on
+
+# Step 7: Copy the compiled binary from the 'builder' stage.
+COPY --from=builder /usr/src/app/target/release/cloud-api-starter /usr/local/bin/cloud-api-starter
+
+# Step 8: Copy the entire source directory for cargo watch.
+# This allows it to detect changes and trigger recompilation.
 COPY . .
 
-# Install cargo-watch
+# Step 9: Install cargo-watch in the final stage.
 RUN cargo install cargo-watch
 
-# Your dev command
+# Step 10: Set the command for the container.
 CMD ["sh", "-c", "cargo watch --poll -x run"]
