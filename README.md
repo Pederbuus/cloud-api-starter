@@ -6,7 +6,7 @@
    * Spins up containers for `PostgreSQL` and the API-directorie(s) (see `docker-compose.yml`)
 
 ## 🎯 Goal
-Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial plan)
+Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial plan)
 
 ### Objectives
 1. **API Service (per language)**
@@ -48,6 +48,7 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 - **29-08 / 01-09-2025** → Repository can now be run using `Docker`
 - **07-09-2025** → Hot-reload now works AND with `Chef` the reload-part went from 26sec to 1sec
 - **09-09-2025** → Have imports in a single file (for now), added a query POST-endpoint
+- **12-09-2025** → setup of `.NET`, hot-reload, connection to `postgres`
 
 
 ## TODO
@@ -58,4 +59,5 @@ Learn to write in **Rust**, **Java**, and **Python** (maybe **C++**).  (Initial 
 - ~~Fix "hot-reload" for `Docker`, as it should work, but doesn't...~~
 - Write automated tests
 - Generate a webpage with the API-description
+- Generate an [api-overview](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio-code) using .NET
 <!-- ~~ abc ~~ -->
