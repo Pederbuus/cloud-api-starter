@@ -3,7 +3,7 @@
 ## Run using Docker
 1. Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. In the root-directory run `docker-compose up`
-   * Spins up containers for `PostgreSQL` and the API-directorie(s) (see `docker-compose.yml`)
+   * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`)
 
 ## 🎯 Goal
 Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial plan)
@@ -28,15 +28,15 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 ## 📌 Requirements (evolves)
 
 ### API Endpoints
-- `GET /notes` → list all notes
-- `POST /notes` → create a note
-- `POST /notes/query` → create a note
-- `GET /notes/{id}` → retrieve a single note
-- `DELETE /notes/{id}` → delete a note
+- `GET /vehicle` → list all vehicle
+- `POST /vehicle` → create a note
+- `POST /vehicle/query` → create a note
+- `GET /vehicle/{id}` → retrieve a single note
+- `DELETE /vehicle/{id}` → delete a note
 
 ### Utility Endpoints
 - `GET /ping` → return pong
-- `GET /notes/total` → returns the total number of notes in the DB  
+- `GET /vehicle/total` → returns the total number of vehicles in the DB  
 
 ### Security
 - Implement **credentials-based access** (authentication/authorization). _Research needed_
@@ -49,6 +49,8 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - **07-09-2025** → Hot-reload now works AND with `Chef` the reload-part went from 26sec to 1sec
 - **09-09-2025** → Have imports in a single file (for now), added a query POST-endpoint
 - **12-09-2025** → setup of `.NET`, hot-reload, connection to `postgres`
+- **17-09-2025** → Redone `.NET`, no hot-reload, connection to `postgres`
+- **22-09-2025** → Comment `.NET`
 
 
 ## TODO
@@ -59,5 +61,6 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - ~~Fix "hot-reload" for `Docker`, as it should work, but doesn't...~~
 - Write automated tests
 - Generate a webpage with the API-description
-- Generate an [api-overview](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio-code) using .NET
+- `.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger
+- `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json"
 <!-- ~~ abc ~~ -->

@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Service for your Rust API
+  # Service for Rust API
   rust-api:
     # Build context points to the subdirectory
     build:
@@ -35,27 +35,24 @@ services:
       db:
         condition: service_healthy
 
-  # Service for your .NET API
-  dotnet-api:
+  # Service for .NET API
+  net-api:
     build:
-      context: ./dotnet-api
+      context: ./TodoApi
       dockerfile: Dockerfile.dev
-    volumes:
-      - ./dotnet-api:/app
-      - /app/bin
-      - /app/obj
-      - dotnet-certs:/root/.aspnet/https
     ports:
       - "5297:5297"
-      # - "7007:7007"
+      - "7215:7215"
     environment:
-       - ASPNETCORE_URLS=http://+:5297 #;https://+:7007
-      # - ASPNETCORE_Kestrel__Certificates__Default__Password=password
-      # - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/aspnetapp.pfx
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=your-password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/App/aspnetapp.pfx
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=rust_api_db;Username=user;Password=password
+      - ASPNETCORE_URLS=http://+:5297;https://+:7215
     depends_on:
       db:
         condition: service_healthy
-    entrypoint: /usr/local/bin/entrypoint.sh
+
 
 volumes:
   postgres_data:
