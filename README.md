@@ -5,7 +5,9 @@
 2. In the root-directory run `docker-compose up`
    * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`) `port 5432`
    * `.Net` - `http port 5297` - `https port 7215`
-   * `Rust` - `port 3000`
+   * `Rust` - `port 3000` (is setup for hot reload)
+
+> **_NOTE:_**  For deploying Docker makes sence, but for development running some kind of 'watch' on the project would be better.
 
 ## 🎯 Goal
 Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial plan)
@@ -34,7 +36,9 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - `POST /vehicle` → create a note
 - `POST /vehicle/query` → create a note
 - `GET /vehicle/{id}` → retrieve a single note
+- `PUT /vehicle/{id}` → edit a note
 - `DELETE /vehicle/{id}` → delete a note
+
 
 ### Utility Endpoints
 - `GET /ping` → return pong
@@ -64,5 +68,5 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - Write automated tests
 - ~~Generate a webpage with the API-description.~~ See`.Net`
 - ~~`.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger~~
-- `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json"
+- `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json". Don't know if it should do this.
 <!-- ~~ abc ~~ -->
