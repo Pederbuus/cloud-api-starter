@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.Rewrite;
 using TodoApi.Models;
 
 
@@ -20,6 +21,10 @@ builder.Services.AddDbContext<VehicleContext>(options =>
 
 var app = builder.Build();
 
+// Redirect root URL './' to Swagger UI './swagger'
+var rewriteOptions = new RewriteOptions().AddRedirect("^$", "swagger");
+app.UseRewriter(rewriteOptions);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -37,11 +42,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-// Apply database migrations on startup
+// Used to setup the database on startup
+// This project does it the other way, using `docker-entrypoint-initdb.d` to initialize the database
 try
 {
-    // would be used to setup the database initially
-    // This project does it the other way, using `docker-entrypoint-initdb.d` to initialize the database
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<VehicleContext>();
