@@ -3,7 +3,9 @@
 ## Run using Docker
 1. Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. In the root-directory run `docker-compose up`
-   * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`)
+   * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`) `port 5432`
+   * `.Net` - `http port 5297` - `https port 7215`
+   * `Rust` - `port 3000`
 
 ## 🎯 Goal
 Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial plan)
@@ -28,7 +30,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 ## 📌 Requirements (evolves)
 
 ### API Endpoints
-- `GET /vehicle` → list all vehicle
+- `GET /vehicle` → list all entries
 - `POST /vehicle` → create a note
 - `POST /vehicle/query` → create a note
 - `GET /vehicle/{id}` → retrieve a single note
@@ -60,7 +62,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - ~~Research `docker`~~, Google - `Cloud Run functions`, ...
 - ~~Fix "hot-reload" for `Docker`, as it should work, but doesn't...~~
 - Write automated tests
-- Generate a webpage with the API-description
-- `.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger
+- ~~Generate a webpage with the API-description.~~ See`.Net`
+- ~~`.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger~~
 - `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json"
 <!-- ~~ abc ~~ -->

@@ -78,8 +78,15 @@ namespace TodoApi.Controllers
         // POST: api/Vehicles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
+        public async Task<ActionResult<Vehicle>> PostVehicle(VehicleCreateDto vehicleDto)
         {
+            var vehicle = new Vehicle
+            {
+                id = Guid.NewGuid(),
+                make = vehicleDto.make,
+                model = vehicleDto.model,
+                year = vehicleDto.year
+            };
             _context.Vehicle.Add(vehicle);
             await _context.SaveChangesAsync();
 
