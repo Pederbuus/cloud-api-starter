@@ -14,7 +14,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 
 ### Objectives
 1. **API Service (per language)**
-   - Implement an API that supports `POST`, `GET`, `DELETE` requests to `Postgres`
+   - Implement an API that supports `POST`, `GET`, `DELETE` and `PUT` requests to `Postgres`
    - Comment the code and the overall structure of the program
    - Create README for each language (research standard custom)
 
@@ -24,7 +24,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 
 3. **Cloud Setup**
    - Google - `Cloud Run functions`
-   - Deploy as a `docker container`
+   - Deploy as a `Docker container`
    - Configure deployment on **Azure**. (unsure what is in Azure)
 
 
@@ -33,15 +33,15 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 
 ### API Endpoints
 - `GET /vehicle` → list all entries
+- `GET /vehicle/{id}` → retrieve a single note
 - `POST /vehicle` → create a note
 - `POST /vehicle/query` → create a note
-- `GET /vehicle/{id}` → retrieve a single note
 - `PUT /vehicle/{id}` → edit a note
 - `DELETE /vehicle/{id}` → delete a note
 
 
 ### Utility Endpoints
-- `GET /ping` → return pong
+- `GET /ping` → returns pong
 - `GET /vehicle/total` → returns the total number of vehicles in the DB  
 
 ### Security
@@ -57,6 +57,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - **12-09-2025** → setup of `.NET`, hot-reload, connection to `postgres`
 - **17-09-2025** → Redone `.NET`, no hot-reload, connection to `postgres`
 - **22-09-2025** → Comment `.NET`
+- **29-09-2025** → `Rust` - Fix logic error, implement `Put`, write a few tests (more are needed)
 
 
 ## TODO
@@ -69,4 +70,5 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 - ~~Generate a webpage with the API-description.~~ See`.Net`
 - ~~`.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger~~
 - `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json". Don't know if it should do this.
+- `Rust` & `.Net` - return httpStatus for every request?
 <!-- ~~ abc ~~ -->

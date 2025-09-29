@@ -1,7 +1,7 @@
 pub mod utils;
 use crate::utils::*;
 mod vehicle;
-use vehicle::{vehicle_get, vehicle_post, vehicle_post_query};
+use vehicle::{vehicle_get, vehicle_post, vehicle_get_id, vehicle_put, vehicle_post_query};
 
 #[tokio::main]
 async fn main() {
@@ -15,11 +15,14 @@ async fn main() {
 
     // Build the Axum router
     let app = Router::new()
-        .route("/", get(ping)) //ping endpoint
-        .route("/vehicle", get(vehicle_get))
-        .route("/vehicle", post(vehicle_post))
-        .route("/vehicle/query", post(vehicle_post_query))
-        .route("/vehicle/total", get(vehicle_total))
+    .route("/", get(|| async { "Welcome to the Vehicle API" }))
+    .route("/vehicle", get(vehicle_get))
+    .route("/vehicle", post(vehicle_post))
+    .route("/vehicle/{capture}", put(vehicle_put)) // Alternative route with {id}
+    .route("/vehicle/query", post(vehicle_post_query))
+    .route("/vehicle/{capture}", get(vehicle_get_id))
+    .route("/ping", get(ping)) //ping endpoint
+    .route("/vehicle/total", get(vehicle_total))
         .with_state(shared_state); // Pass the shared state (the db) to Axum
 
     // Run the server
@@ -38,7 +41,7 @@ async fn vehicle_total(
     // Example: Use the client to execute a query
     let rows = state.db_client.query("SELECT * FROM vehicle", &[]).await.unwrap();
     let result = rows.len();
-    format!("Rows in the database: {}", result+4)
+    format!("Rows in the database: {}", result)
 }
 
 
