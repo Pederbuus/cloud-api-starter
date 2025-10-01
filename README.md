@@ -6,15 +6,16 @@
    * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`) `port 5432`
    * `.Net` - `http port 5297` - `https port 7215`
    * `Rust` - `port 3000` (is setup for hot reload)
+3. Open [https://[::]:7215](https://[::]:7215) for the API's definition
 
-> **_NOTE:_**  For deploying Docker makes sence, but for development running some kind of 'watch' on the project would be better.
+> **_NOTE:_**  For deployment of the project Docker makes sence, but for development running it locally with some kind of 'watch' on the project would be better.
 
 ## 🎯 Goal
-Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial plan)
+Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.
 
 ### Objectives
 1. **API Service (per language)**
-   - Implement an API that supports `POST`, `GET`, `DELETE` and `PUT` requests to `Postgres`
+   - Implement an API that supports `POST`, `GET`, `DELETE` and `PUT` requests to `PostgresSQL`
    - Comment the code and the overall structure of the program
    - Create README for each language (research standard custom)
 
@@ -30,6 +31,30 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 
 
 ## 📌 Requirements (evolves)
+
+### Example Data Model
+
+A typical `vehicle` table in PostgreSQL could look like:
+
+```sql
+CREATE TABLE vehicle (
+   id UUID PRIMARY KEY,
+   make VARCHAR(255) NOT NULL,
+   model VARCHAR(255) NOT NULL,
+   year INTEGER NOT NULL CHECK (year >= 0)
+);
+```
+
+Equivalent C# class:
+
+```csharp
+class Vehicle {
+   Guid id { get; set; }
+   string make { get; set; }
+   string model { get; set; }
+   int year { get; set; }
+}
+```
 
 ### API Endpoints
 - `GET /vehicle` → list all entries
@@ -61,14 +86,14 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.  (Initial p
 
 
 ## TODO
-**28-08-2025**
-
 <!-- Easy🟢, Medium🟡, Hard🔴 -->
 - ~~Research `docker`~~, Google - `Cloud Run functions`, ...
 - ~~Fix "hot-reload" for `Docker`, as it should work, but doesn't...~~
 - Write automated tests
-- ~~Generate a webpage with the API-description.~~ See`.Net`
+- ~~Generate a webpage with the API-description.~~ See `.Net`
 - ~~`.Net` - redirect https://[::1]:7215/ to https://[::1]:7215/swagger~~
 - `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json". Don't know if it should do this.
 - `Rust` & `.Net` - return httpStatus for every request?
+- `.Net` - Catch the non-Nullable before all of the errors
+- Begin on `Java`, `Python` and `Google Functions`/`Azure`
 <!-- ~~ abc ~~ -->

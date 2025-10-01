@@ -80,6 +80,14 @@ namespace TodoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Vehicle>> PostVehicle(VehicleCreateDto vehicleDto)
         {
+
+            if (!ModelState.IsValid)
+            {
+                // This returns a clean, detailed 400 error response 
+                // based on the [Required] attributes.
+                return BadRequest(ModelState);
+            }
+
             var vehicle = new Vehicle
             {
                 id = Guid.NewGuid(),
