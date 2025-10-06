@@ -1,9 +1,9 @@
 services:
-  # Service for your PostgreSQL database
+  # PostgreSQL database
   db:
     image: postgres:17
     ports:
-      - "5432:5432"
+      - "5432:5432" # Expose PostgreSQL port, this is PostgreSQL's standard port so make sure it's free
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # Service for Rust API
+  # Rust API
   rust-api:
     # Build context points to the subdirectory
     build:
@@ -29,13 +29,13 @@ services:
       - "3000:3000"
     command: sh -c "cargo watch --poll -x run" # potentially not needed
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/rust_api_db
+      - DATABASE_URL=postgres://user:password@db:5432/rust_api_db #DB credentials for Rust app to connect to Postgres
       - CARGO_TARGET_DIR=/app/target
     depends_on:
       db:
         condition: service_healthy
 
-  # Service for .NET API
+  # .NET API
   net-api:
     build:
       context: ./TodoApi
@@ -47,8 +47,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Password=your-password
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/App/aspnetapp.pfx
-      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=rust_api_db;Username=user;Password=password
-      - ASPNETCORE_URLS=http://+:5297;https://+:7215
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=rust_api_db;Username=user;Password=password #DB credentials for Rust app to connect to Postgres
+      - ASPNETCORE_URLS=http://+:5297;https://+:7215 # Listen on both HTTP and HTTPS
     depends_on:
       db:
         condition: service_healthy
