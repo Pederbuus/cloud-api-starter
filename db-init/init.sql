@@ -10,7 +10,8 @@ CREATE TABLE vehicle (
     );
 
 -- Insert some initial data
-INSERT INTO vehicle (make, model, year) VALUES
-('Toyota', 'Camry', 2022),
-('Honda', 'Civic', 2023),
-('Ford', 'F-150', 2024);
+-- Using fixed UUIDs for consistency in testing
+INSERT INTO vehicle (id, make, model, year) VALUES
+('00000000-0000-0000-0000-000000000000', 'Toyota', 'Camry', 2022),
+('00000000-0000-0000-0000-000000000001', 'Honda', 'Civic', 2023),
+('00000000-0000-0000-0000-000000000002', 'Ford', 'F-150', 2024);
