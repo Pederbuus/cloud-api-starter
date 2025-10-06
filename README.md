@@ -89,7 +89,7 @@ class Vehicle {
 - **17-09-2025** → Redone `.NET`, no hot-reload, connection to `postgres`
 - **22-09-2025** → Comment `.NET`
 - **29-09-2025** → `Rust` - Fix logic error, implement `Put`, write a few tests (more are needed)
-- **06-10-2025** → `Java` -
+- **06-10-2025** → `Java` - Implementation + `Rust` `Delete`
 
 
 ## TODO
@@ -102,5 +102,5 @@ class Vehicle {
 - `.Net` - http://[::1]:5297/swagger can't load as "NetworkError when attempting to fetch resource. /openapi/v1.json". Don't know if it should do this.
 - `Rust` & `.Net` - return httpStatus for every request?
 - `.Net` - Catch the non-Nullable before all of the errors
-- Begin on `Java`, `Python` and `Google Functions`/`Azure`
+- ~~Begin on `Java`~~, `Python` and `Google Functions`/`Azure`
 <!-- ~~ abc ~~ -->
