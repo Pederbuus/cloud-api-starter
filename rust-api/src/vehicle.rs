@@ -159,3 +159,30 @@ pub async fn vehicle_post_query(
 
     Json::from(payload)
 }
+
+pub async fn vehicle_delete(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<Uuid>,
+) -> impl axum::response::IntoResponse {
+
+    let result = state.db_client
+        .execute("DELETE FROM vehicle WHERE id = $1", &[&id])
+        .await;
+
+    match result {
+        Ok(rows_deleted) => {
+            if rows_deleted == 0 {
+                // No rows deleted means the item was not found
+                Err((StatusCode::NOT_FOUND, "Vehicle not found".to_string())) // 404
+            } else {
+                // Successfully deleted
+                Ok((StatusCode::NO_CONTENT, ())) // 204 No Content
+            }
+        }
+        Err(e) => {
+            // Unexpected Error: DB connection, invalid input that broke the query, etc.
+            eprintln!("DB error: {:?}", e);
+            Err((StatusCode::INTERNAL_SERVER_ERROR, "Database error".to_string())) // 500
+        }
+    }
+}

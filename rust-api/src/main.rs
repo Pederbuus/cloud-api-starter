@@ -1,7 +1,7 @@
 pub mod utils;
 use crate::utils::*;
 mod vehicle;
-use vehicle::{vehicle_get, vehicle_post, vehicle_get_id, vehicle_put, vehicle_post_query};
+use vehicle::{vehicle_get, vehicle_post, vehicle_get_id, vehicle_put, vehicle_post_query, vehicle_delete};
 
 #[tokio::main]
 async fn main() {
@@ -21,6 +21,7 @@ async fn main() {
     .route("/vehicle/{capture}", put(vehicle_put)) // Alternative route with {id}
     .route("/vehicle/query", post(vehicle_post_query))
     .route("/vehicle/{capture}", get(vehicle_get_id))
+    .route("/vehicle/{capture}", delete(vehicle_delete))
     .route("/ping", get(ping)) //ping endpoint
     .route("/vehicle/total", get(vehicle_total))
         .with_state(shared_state); // Pass the shared state (the db) to Axum
