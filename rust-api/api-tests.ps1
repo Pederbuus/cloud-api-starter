@@ -36,13 +36,21 @@ $Params = @{
 }
 Invoke-RestMethod @Params
 
+# Get vehicles using: Query
+$Params = @{
+    Uri = 'http://localhost:3000/vehicle/f8486382-5a9c-4af1-bd08-ab24ca969cac'
+    Method = 'Delete'
+}
+Invoke-RestMethod @Params
+
 # PUT vehicle - with StatusVariable
 # 1. Define the parameters (remove StatusVariable)
 $Params = @{
-    Uri = 'http://localhost:3000/vehicle/3e68be47-4e1f-4b34-8c31-b770ec6163c3'
+    Uri = 'http://localhost:8080/vehicle/f8486382-5a9c-4af1-bd08-ab24ca969cac'
     Method = 'Put'
+    Headers = @{ 'Accept' = 'application/json' }
     Body = @{
-        make = "Toyota"
+        make = "Toyota1"
         model = "Corolla"
         year = 2024
     } | ConvertTo-Json
@@ -60,3 +68,18 @@ Write-Host "HTTP Status Code: $($Response.StatusCode)"
 # NOTE: The Content property is a string, so you must convert it back to an object
 $ResponseObject = $Response.Content | ConvertFrom-Json
 $ResponseObject
+
+
+$Params = @{
+    Uri = "http://localhost:8080/vehicle"
+    Method = 'POST'
+    Headers = @{ 'Accept' = 'application/json' }
+    Body = @{
+        make = "New Make"
+        model = "New Model"
+        year = 2025
+    } | ConvertTo-Json
+    ContentType = 'application/json'
+}
+# Execute the update
+Invoke-RestMethod @Params

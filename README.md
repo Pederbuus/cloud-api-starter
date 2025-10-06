@@ -6,8 +6,14 @@
    * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`) `port 5432`
    * `.Net` - `http port 5297` - `https port 7215`
    * `Rust` - `port 3000` (is setup for hot reload)
+   * `Java` - `port 8080`
 3. Open [https://[::]:7215](https://[::]:7215) for the API's definition
 
+## Other commands
+`docker compose up -d` to detatched mode \
+`docker ps` list all containers currently running \
+`docker compose down -v` remove volumes (useful but unsure what it does) \
+`docker compose up --build`\
 > **_NOTE:_**  For deployment of the project Docker makes sence, but for development running it locally with some kind of 'watch' on the project would be better.
 
 ## 🎯 Goal
@@ -83,6 +89,7 @@ class Vehicle {
 - **17-09-2025** → Redone `.NET`, no hot-reload, connection to `postgres`
 - **22-09-2025** → Comment `.NET`
 - **29-09-2025** → `Rust` - Fix logic error, implement `Put`, write a few tests (more are needed)
+- **06-10-2025** → `Java` -
 
 
 ## TODO
