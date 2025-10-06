@@ -55,7 +55,6 @@ public class VehicleController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT) // Returns HTTP 204 on success (no body content)
     public void deleteVehicle(@PathVariable UUID id) {
-        // System.out.println("Deleting vehicle with ID: " + id);
         vehicleService.deleteById(id);
     }
 }
