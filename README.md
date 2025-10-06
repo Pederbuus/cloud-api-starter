@@ -7,14 +7,14 @@
    * `.Net` - `http port 5297` - `https port 7215`
    * `Rust` - `port 3000` (is setup for hot reload)
    * `Java` - `port 8080`
-3. Open [https://[::]:7215](https://[::]:7215) for the API's definition
+3. Open [https://[::]:7215](https://[::]:7215) for a web-based overview of the API definition
 
 ## Other commands
-`docker compose up -d` to detatched mode \
+`docker compose up -d` to detatched mode in console \
 `docker ps` list all containers currently running \
-`docker compose down -v` remove volumes (useful but unsure what it does) \
-`docker compose up --build`\
-> **_NOTE:_**  For deployment of the project Docker makes sence, but for development running it locally with some kind of 'watch' on the project would be better.
+`docker compose down -v` remove volumes (remove persistent data), used to re-initialize DB \
+`docker compose up --build` ["If you change a service's Dockerfile or the contents of its build directory, run docker compose build to rebuild it."](https://docs.docker.com/reference/cli/docker/compose/build/)
+> **_NOTE:_**  For deployment of the project Docker makes sence, but for development running it locally with some kind of 'watch' on the project would be better. Is very good to initialize the DB for development.
 
 ## 🎯 Goal
 Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.
@@ -62,13 +62,36 @@ class Vehicle {
 }
 ```
 
-### API Endpoints
+<!-- ### API Endpoints
 - `GET /vehicle` → list all entries
 - `GET /vehicle/{id}` → retrieve a single note
+   - Arguments: id -> id, make, model, year
 - `POST /vehicle` → create a note
+   - Arguments: make, model, year
 - `POST /vehicle/query` → create a note
 - `PUT /vehicle/{id}` → edit a note
-- `DELETE /vehicle/{id}` → delete a note
+- `DELETE /vehicle/{id}` → delete a note -->
+
+## API Endpoints
+- **GET /vehicle** — List all vehicles  
+  _Args:_ none · _Res:_ `[ {id, make, model, year} ]`
+
+- **GET /vehicle/{id}** — Get vehicle by ID  
+  _Args:_ `id` · _Res:_ `{id, make, model, year}`
+
+- **POST /vehicle** — Create a vehicle  
+  _Args:_ `{make, model, year}` · _Res:_ none
+
+<!-- Should not be this way -->
+- **POST /vehicle/query** — List all vehicles  
+  _Args:_ `http://localhost:$Port/vehicle/query?make=Tesla&model=Model S&year=2020` · _Res:_ none
+
+- **PUT /vehicle/{id}** — Get vehicle by ID  
+  _Args:_ `{make?, model?, year?}` · _Res:_ none
+
+- **DELETE /vehicle/{id}** — Create a vehicle  
+  _Args:_ none · _Res:_ none
+
 
 
 ### Utility Endpoints
