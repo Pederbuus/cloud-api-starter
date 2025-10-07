@@ -1,7 +1,10 @@
 # README Java
 `run main` in JavaApiApplication.java
 
-Will run on http://localhost:8080/..
+1. To compile: `mvn package`
+2. To then run it: `cd target && java -jar java-api-0.0.1-SNAPSHOT.jar`
+
+Will run on http://localhost:8080/...
 
 ## Controll flow:
 - **Model**
