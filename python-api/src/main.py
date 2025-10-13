@@ -1,10 +1,8 @@
-from typing import Union
+from typing import Union, Annotated
 import uuid
-# uuid.uuid4()
 
 from fastapi import FastAPI, HTTPException
 import psycopg2
-from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Field, Session, SQLModel, create_engine, select
@@ -48,14 +46,15 @@ def read_total_vehicle():
     cursor.execute("SELECT COUNT(*) FROM vehicle;")
     record = cursor.fetchone()
     total = record[0] if record else 0
-    return {"total_vehicles": total}
+    return {total}
 
 
 @app.get("/vehicle")
 def read_vehicle():
     cursor.execute("SELECT * FROM vehicle;")
     record = cursor.fetchall()
-    return {"Data from Database": record}
+    return record
+# For multible items use a form like this: {"vehicles": record, "session": "112"}
 
 
 # made with sqlmodel
@@ -102,7 +101,7 @@ def query_vehicle(make: Union[str, None] = None, model: Union[str, None] = None,
     except psycopg2.Error as e:
         connection.rollback()
         raise HTTPException(status_code=500, detail="Database error")
-    return {"id": str(vehicle_id), "message": "Vehicle added successfully"}
+    return #{"id": str(vehicle_id), "message": "Vehicle added successfully"}
 
 @app.put("/vehicle/{id}")
 def update_vehicle(id: str, make: Union[str, None] = None, model: Union[str, None] = None, year: Union[int, None] = None):
@@ -146,7 +145,7 @@ def update_vehicle(id: str, make: Union[str, None] = None, model: Union[str, Non
         raise HTTPException(status_code=500, detail="Database error")
 
     id_val, make_val, model_val, year_val = updated
-    return {"id": str(id_val), "make": make_val, "model": model_val, "year": year_val}
+    return #{"id": str(id_val), "make": make_val, "model": model_val, "year": year_val}
 
 @app.delete("/vehicle/{id}")
 def delete_vehicle(id: str):
@@ -166,4 +165,4 @@ def delete_vehicle(id: str):
         connection.rollback()
         raise HTTPException(status_code=500, detail="Database error")
 
-    return {"id": str(deleted[0]), "message": "Vehicle deleted successfully"}
+    return #{"id": str(deleted[0]), "message": "Vehicle deleted successfully"}
