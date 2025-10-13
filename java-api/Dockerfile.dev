@@ -1,0 +1,32 @@
+# Stage 1: The Build Stage
+# Use an image that contains both Java 25 JDK and Maven
+FROM eclipse-temurin:25-jdk AS builder
+
+# 1. Install Maven and other tools
+ENV MAVEN_VERSION=3.9.6
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl unzip git maven  \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src/ src/
+
+# Create the non-root user (using the high UID to avoid conflict)
+ARG USER=app
+ARG UID=10001 
+RUN groupadd -r ${USER} -g ${UID} \
+  && useradd -r -u ${UID} -g ${USER} -s /bin/bash -d /home/${USER} ${USER}
+
+# we create the necessary directory structure and change ownership to the 'app' user.
+RUN mkdir -p /home/${USER}/.m2 \
+  && chown -R ${USER}:${USER} /home/${USER}
+
+# Now, mvn package can write to /home/app/.m2/repository
+#RUN mvn package -DskipTests 
+
+RUN apt-get update && apt-get install -y --no-install-recommends maven
+RUN mvn package -DskipTests
+
+# Note: The JAR file is now located at /app/target/java-api-0.0.1-SNAPSHOT.jar inside this 'builder' stage.

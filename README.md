@@ -40,7 +40,7 @@ Learn to write in **Rust**, **C#** (.NET), **Java**, and **Python**.
 
 ### Example Data Model
 
-A typical `vehicle` table in PostgreSQL could look like:
+The `vehicle` table in PostgreSQL looks like:
 
 ```sql
 CREATE TABLE vehicle (

@@ -52,6 +52,24 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  
+  java-api:
+    build:
+      context: ./java-api
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    # volumes:
+    #   - .:/app  # Breaks the build, needs investigation
+    command: sh -c "mvn package && java -jar target/*.jar"
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rust_api_db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      db:
+        condition: service_healthy
 
 
 volumes:
