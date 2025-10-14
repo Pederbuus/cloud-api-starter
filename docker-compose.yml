@@ -71,6 +71,19 @@ services:
       db:
         condition: service_healthy
 
+  python-api:
+    build:
+      context: ./python-api
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    # environment:
+    #   - DATABASE_URL=postgresql://user:password@db:5432/rust_api_db
+    command: sh -c "fastapi dev src/main.py"
+    depends_on:
+      db:
+        condition: service_healthy
+
 
 volumes:
   postgres_data:

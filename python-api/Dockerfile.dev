@@ -1,0 +1,37 @@
+# --- Development Dockerfile for FastAPI/SQLModel Project ---
+
+# Use the official Python 3.13 slim image as the base.
+# Note: Python 3.13 is a future version/in pre-release; adjust the tag 
+# (e.g., to python:3.12-slim) if 3.13.7 is not yet stable/available on Docker Hub.
+FROM python:3.13-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+ENV APP_PORT 8000
+ENV HOST 0.0.0.0
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Install dependencies
+# We use a two-step process to leverage Docker's build cache:
+# 1. Copy only the requirements file
+COPY requirements.txt .
+
+# 2. Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port where Uvicorn will run
+EXPOSE ${APP_PORT}
+
+# Default command to run the application in development mode with auto-reloading.
+# Assumes your main FastAPI application object is named 'app' in 'main.py'.
+# The reload flag watches for file changes and restarts the server automatically.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# To use this, you would typically build and run with:
+# docker build -f Dockerfile.dev -t my-app-dev .
+# docker run -p 8000:8000 my-app-dev

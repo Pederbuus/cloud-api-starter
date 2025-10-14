@@ -8,30 +8,30 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 # Connect to postgres with SQLModel
-DATABASE_URL = "postgresql://user:password@localhost:5432/rust_api_db"
+# DATABASE_URL = "postgresql://user:password@localhost:5432/rust_api_db"
 
-engine = create_engine(DATABASE_URL, echo=True)
+# engine = create_engine(DATABASE_URL, echo=True)
 
-def get_session():
-    with Session(engine) as session:
-        yield session
+# def get_session():
+#     with Session(engine) as session:
+#         yield session
 
-class Vehicle(SQLModel, table=True):
-    id: uuid.UUID | None = Field(default=None, primary_key=True)
-    make: str = Field(index=True)
-    model: str = Field(index=True)
-    year: int = Field(index=True)
-# class Vehicle:
-#    id: uuid.UUID
-#    make: str
-#    model: str
-#    year: int
+# class Vehicle(SQLModel, table=True):
+#     id: uuid.UUID | None = Field(default=None, primary_key=True)
+#     make: str = Field(index=True)
+#     model: str = Field(index=True)
+#     year: int = Field(index=True)
+# # class Vehicle:
+# #    id: uuid.UUID
+# #    make: str
+# #    model: str
+# #    year: int
 
-SessionDep = Annotated[Session, Depends(get_session)]
+# SessionDep = Annotated[Session, Depends(get_session)]
 
 
 # Connect to postgres by psycopg2
-connection = psycopg2.connect(database="rust_api_db", user="user", password="password", host="localhost", port=5432)
+connection = psycopg2.connect(database="rust_api_db", user="user", password="password", host="db", port=5432)
 
 cursor = connection.cursor()
 
@@ -59,28 +59,27 @@ def read_vehicle():
 
 # made with sqlmodel
 @app.get("/vehicle/{id}")
-def read_vehicle_item(id: uuid.UUID, session: SessionDep) -> Vehicle:
-    vehicle = session.get(Vehicle, id)
-    if not vehicle:
-        raise HTTPException(status_code=404, detail="Vehicle not found")
-    return vehicle
-
-# made with psycopg2
-# def read_vehicle_item(id: str):
+# def read_vehicle_item(id: uuid.UUID, session: SessionDep) -> Vehicle:
 #     vehicle = session.get(Vehicle, id)
-#     try:
-#         id_uuid = uuid.UUID(id)
-#     except (ValueError, AttributeError):
-#         raise HTTPException(status_code=400, detail="Invalid UUID")
-
-#     cursor.execute("SELECT * FROM vehicle WHERE id=%s;", (str(id_uuid),))
-#     record = cursor.fetchall()
-#     row = record[0] if record else None
-#     if row is None:
+#     if not vehicle:
 #         raise HTTPException(status_code=404, detail="Vehicle not found")
-#     # assuming columns are (id, make, model, year)
-#     id_val, make, model, year = row
-#     return {"id": str(id_val), "make": make, "model": model, "year": year}
+#     return vehicle
+# made with psycopg2
+def read_vehicle_item(id: str):
+    vehicle = session.get(Vehicle, id)
+    try:
+        id_uuid = uuid.UUID(id)
+    except (ValueError, AttributeError):
+        raise HTTPException(status_code=400, detail="Invalid UUID")
+
+    cursor.execute("SELECT * FROM vehicle WHERE id=%s;", (str(id_uuid),))
+    record = cursor.fetchall()
+    row = record[0] if record else None
+    if row is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    # assuming columns are (id, make, model, year)
+    id_val, make, model, year = row
+    return {"id": str(id_val), "make": make, "model": model, "year": year}
 
 @app.post("/vehicle/query", status_code=201)
 def query_vehicle(make: Union[str, None] = None, model: Union[str, None] = None, year: Union[int, None] = None):
