@@ -7,6 +7,7 @@
    * `.Net` - `http port 5297` - `https port 7215`
    * `Rust` - `port 3000` (is setup for hot reload)
    * `Java` - `port 8080`
+   * `Python` - `port 8000`
 3. Open [https://[::]:7215](https://[::]:7215) for a web-based overview of the API definition
 
 ## Other commands
@@ -92,11 +93,16 @@ class Vehicle {
 - **DELETE /vehicle/{id}** — Create a vehicle  
   _Args:_ none · _Res:_ none
 
-
-
 ### Utility Endpoints
 - `GET /ping` → returns pong
 - `GET /vehicle/total` → returns the total number of vehicles in the DB  
+
+### Docks
+| API docs    | Http |
+| -------- | -------|
+|Swagger Python | http://localhost:8000/docs |
+|Redoc Python | http://127.0.0.1:8000/redoc |
+|Swagger .Net | https://localhost:7215 |
 
 ### Security
 - Implement **credentials-based access** (authentication/authorization). _Research needed_
