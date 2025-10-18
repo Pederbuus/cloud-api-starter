@@ -14,7 +14,8 @@
 `docker compose up -d` to detatched mode in console \
 `docker ps` list all containers currently running \
 `docker compose down -v` remove volumes (remove persistent data), used to re-initialize DB \
-`docker compose up --build` ["If you change a service's Dockerfile or the contents of its build directory, run docker compose build to rebuild it."](https://docs.docker.com/reference/cli/docker/compose/build/)
+`docker compose up --build` ["If you change a service's Dockerfile or the contents of its build directory, run docker compose build to rebuild it."](https://docs.docker.com/reference/cli/docker/compose/build/)\
+`docker-compose up -d --no-deps --build` build from scratch
 > **_NOTE:_**  For deployment of the project Docker makes sence, but for development running it locally with some kind of 'watch' on the project would be better. Is very good to initialize the DB for development.
 
 ## 🎯 Goal
@@ -75,23 +76,29 @@ class Vehicle {
 
 ## API Endpoints
 - **GET /vehicle** — List all vehicles  
-  _Args:_ none · _Res:_ `[ {id, make, model, year} ]`
+  _Args:_ none \
+  _Res:_ `[ {id, make, model, year} ]`
 
 - **GET /vehicle/{id}** — Get vehicle by ID  
-  _Args:_ `id` · _Res:_ `{id, make, model, year}`
+  _Args:_ `id` \
+  _Res:_ `{id, make, model, year}`
 
 - **POST /vehicle** — Create a vehicle  
-  _Args:_ `{make, model, year}` · _Res:_ none
+  _Args:_ `{make, model, year}` \
+  _Res:_ none
 
 <!-- Should not be this way -->
 - **POST /vehicle/query** — List all vehicles  
-  _Args:_ `http://localhost:$Port/vehicle/query?make=Tesla&model=Model S&year=2020` · _Res:_ none
+  _Args:_ `http://localhost:$Port/vehicle/query?make=Tesla&model=Model S&year=2020` \
+  _Res:_ none
 
 - **PUT /vehicle/{id}** — Get vehicle by ID  
-  _Args:_ `{make?, model?, year?}` · _Res:_ none
+  _Args:_ `{make?, model?, year?}` \
+  _Res:_ none
 
 - **DELETE /vehicle/{id}** — Create a vehicle  
-  _Args:_ none · _Res:_ none
+  _Args:_ none \
+  _Res:_ none
 
 ### Utility Endpoints
 - `GET /ping` → returns pong
@@ -133,8 +140,10 @@ class Vehicle {
 - `Rust` & `.Net` - return httpStatus for every request?
 - `.Net` - Catch the non-Nullable before all of the errors
 - ~~Begin on `Java`~~, ~~`Python`~~ and `Google Functions`/`Azure`
-- `Python` - `SQLmodel` fills the terminal (it shouldn't)
-- `Python` - `"GET /favicon.ico HTTP/1.1" 404` after every request
+- `Python` - `SQLmodel` fills the terminal (I don't want it to)
+- `Python` - Solve the error:`"GET /favicon.ico HTTP/1.1" 404` after every request
 - `Python` - Describe the use of `SQLmodel` and `psycopg2`
 - `Python` - Setup `Docker`
+- `Rust` & `Python` - DB connection must/should have a client that opens a connection, makes and sends the request, revices the responce and then closes the connection. (Is handled in .Net and Java by frameworks)
+- Dobble check that that all of the endpoints are avalible for every language/port (Java is missing the util endpoints)
 <!-- ~~ abc ~~ -->

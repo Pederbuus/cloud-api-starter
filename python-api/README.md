@@ -11,7 +11,7 @@
 Command-line
 1. To run: `fastapi dev src/main.py`
 
-Will run on http://localhost:8000/...
+Will run on http://localhost:8000/api/...
 
 ## Docks
 | API docs    | Http |
