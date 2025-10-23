@@ -1,4 +1,8 @@
-# README Java
+## Installation
+* [Java](https://www.java.com/en/download/)
+* [Maven](https://maven.apache.org/install.html)
+
+## Commands
 Run using the IDE
 1. `run main` in JavaApiApplication.java
 

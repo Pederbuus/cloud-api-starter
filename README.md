@@ -1,14 +1,19 @@
 # Multi-Language API Project
 
+> **_NOTE:_** Works on my home computer and not my laptop. I am abuseing Docker BIG TIME, as Java is build locally and then put up on Docker, NOT GOOD. And python can't connect to the DB on the laptop.
+
 ## Run using Docker
 1. Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. In the root-directory run `docker-compose up`
    * Spins up containers for `PostgreSQL` and the API-directories (see `docker-compose.yml`) `port 5432`
    * `.Net` - `http port 5297` - `https port 7215`
+      * Can have firewall problems
+      * Uses https://localhost:7215/api/Vehicle and not the normal https://localhost:7215/vehicle
    * `Rust` - `port 3000` (is setup for hot reload)
    * `Java` - `port 8080`
-   * `Python` - `port 8000`
-3. Open [https://[::]:7215](https://[::]:7215) for a web-based overview of the API definition
+      * Is build locally and then run in a container, requireing the installment of the dependencies.
+   * `Python` - `port 8000` (Currently not working with Docker)
+3. Open [https://localhost:7215/](https://localhost:7215/) for a web-based overview of the API definition
 
 ## Other commands
 `docker compose up -d` to detatched mode in console \
@@ -127,6 +132,8 @@ class Vehicle {
 - **29-09-2025** → `Rust` - Fix logic error, implement `Put`, write a few tests (more are needed)
 - **06-10-2025** → `Java` - Implementation + `Rust` `Delete`
 - **13-10-2025** → `Python` - Implementation still missing `Docker`
+- **22-10-2025** → All repoitories have a README
+- **23-10-2025** → Consistent README
 
 
 ## TODO
@@ -145,5 +152,5 @@ class Vehicle {
 - `Python` - Describe the use of `SQLmodel` and `psycopg2`
 - `Python` - Setup `Docker`
 - `Rust` & `Python` - DB connection must/should have a client that opens a connection, makes and sends the request, revices the responce and then closes the connection. (Is handled in .Net and Java by frameworks)
-- Dobble check that that all of the endpoints are avalible for every language/port (Java is missing the util endpoints)
+- Dobble check that that all of the endpoints are avalible for every language/port (Java & .Net are missing the util endpoints)
 <!-- ~~ abc ~~ -->
