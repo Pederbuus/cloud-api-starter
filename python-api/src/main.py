@@ -6,34 +6,46 @@ import psycopg2
 
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Field, Session, SQLModel, create_engine, select
+import os
+from dotenv import load_dotenv
 
 # Connect to postgres with SQLModel
-# DATABASE_URL = "postgresql://user:password@localhost:5432/rust_api_db"
+load_dotenv()
 
-# engine = create_engine(DATABASE_URL, echo=True)
+# Prefer an explicit env var, else fallback
+db_url = os.getenv("DATABASE_URL")
 
-# def get_session():
-#     with Session(engine) as session:
-#         yield session
+if not db_url:
+    # if running locally without .env
+    db_url = "postgresql://user:password@localhost:5432/rust_api_db"
 
-# class Vehicle(SQLModel, table=True):
-#     id: uuid.UUID | None = Field(default=None, primary_key=True)
-#     make: str = Field(index=True)
-#     model: str = Field(index=True)
-#     year: int = Field(index=True)
-# # class Vehicle:
-# #    id: uuid.UUID
-# #    make: str
-# #    model: str
-# #    year: int
-
-# SessionDep = Annotated[Session, Depends(get_session)]
+if not db_url:
+    raise RuntimeError("DATABASE_URL environment variable not set")
 
 
-# Connect to postgres by psycopg2
-connection = psycopg2.connect(database="rust_api_db", user="user", password="password", host="db", port=5432)
+engine = create_engine(db_url, echo=True)
 
-cursor = connection.cursor()
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+class Vehicle(SQLModel, table=True):
+    id: uuid.UUID | None = Field(default=None, primary_key=True)
+    make: str = Field(index=True)
+    model: str = Field(index=True)
+    year: int = Field(index=True)
+# class Vehicle:
+#    id: uuid.UUID
+#    make: str
+#    model: str
+#    year: int
+
+SessionDep = Annotated[Session, Depends(get_session)]
+
+# Connect to postgres with psycopg2
+conn = psycopg2.connect(db_url)
+
+cursor = conn.cursor()
 
 app = FastAPI()
 
@@ -57,29 +69,28 @@ def read_vehicle():
 # For multible items use a form like this: {"vehicles": record, "session": "112"}
 
 
-# made with sqlmodel
 @app.get("/vehicle/{id}")
-# def read_vehicle_item(id: uuid.UUID, session: SessionDep) -> Vehicle:
-#     vehicle = session.get(Vehicle, id)
-#     if not vehicle:
-#         raise HTTPException(status_code=404, detail="Vehicle not found")
-#     return vehicle
-# made with psycopg2
-def read_vehicle_item(id: str):
+# made with sqlmodel
+def read_vehicle_item(id: uuid.UUID, session: SessionDep) -> Vehicle:
     vehicle = session.get(Vehicle, id)
-    try:
-        id_uuid = uuid.UUID(id)
-    except (ValueError, AttributeError):
-        raise HTTPException(status_code=400, detail="Invalid UUID")
-
-    cursor.execute("SELECT * FROM vehicle WHERE id=%s;", (str(id_uuid),))
-    record = cursor.fetchall()
-    row = record[0] if record else None
-    if row is None:
+    if not vehicle:
         raise HTTPException(status_code=404, detail="Vehicle not found")
-    # assuming columns are (id, make, model, year)
-    id_val, make, model, year = row
-    return {"id": str(id_val), "make": make, "model": model, "year": year}
+    return vehicle
+# made with psycopg2
+# def read_vehicle_item(id: str):
+#     try:
+#         id_uuid = uuid.UUID(id)
+#     except (ValueError, AttributeError):
+#         raise HTTPException(status_code=400, detail="Invalid UUID")
+
+#     cursor.execute("SELECT * FROM vehicle WHERE id=%s;", (str(id_uuid),))
+#     record = cursor.fetchall()
+#     row = record[0] if record else None
+#     if row is None:
+#         raise HTTPException(status_code=404, detail="Vehicle not found")
+#     # assuming columns are (id, make, model, year)
+#     id_val, make, model, year = row
+#     return {"id": str(id_val), "make": make, "model": model, "year": year}
 
 @app.post("/vehicle/query", status_code=201)
 def query_vehicle(make: Union[str, None] = None, model: Union[str, None] = None, year: Union[int, None] = None):
@@ -93,12 +104,12 @@ def query_vehicle(make: Union[str, None] = None, model: Union[str, None] = None,
             "INSERT INTO vehicle (id, make, model, year) VALUES (%s, %s, %s, %s);",
             (str(vehicle_id), make, model, year)
         )
-        connection.commit()
+        conn.commit()
     except psycopg2.IntegrityError as e:
-        connection.rollback()
+        conn.rollback()
         raise HTTPException(status_code=409, detail="Integrity error: " + str(e))
     except psycopg2.Error as e:
-        connection.rollback()
+        conn.rollback()
         raise HTTPException(status_code=500, detail="Database error")
     return #{"id": str(vehicle_id), "message": "Vehicle added successfully"}
 
@@ -133,14 +144,14 @@ def update_vehicle(id: str, make: Union[str, None] = None, model: Union[str, Non
         cursor.execute(sql, tuple(values))
         updated = cursor.fetchone()
         if updated is None:
-            connection.rollback()
+            conn.rollback()
             raise HTTPException(status_code=404, detail="Vehicle not found")
-        connection.commit()
+        conn.commit()
     except psycopg2.IntegrityError as e:
-        connection.rollback()
+        conn.rollback()
         raise HTTPException(status_code=409, detail="Integrity error: " + str(e))
     except psycopg2.Error:
-        connection.rollback()
+        conn.rollback()
         raise HTTPException(status_code=500, detail="Database error")
 
     id_val, make_val, model_val, year_val = updated
@@ -157,11 +168,11 @@ def delete_vehicle(id: str):
         cursor.execute("DELETE FROM vehicle WHERE id = %s RETURNING id;", (str(id_uuid),))
         deleted = cursor.fetchone()
         if deleted is None:
-            connection.rollback()
+            conn.rollback()
             raise HTTPException(status_code=404, detail="Vehicle not found")
-        connection.commit()
+        conn.commit()
     except psycopg2.Error:
-        connection.rollback()
+        conn.rollback()
         raise HTTPException(status_code=500, detail="Database error")
 
     return #{"id": str(deleted[0]), "message": "Vehicle deleted successfully"}
